@@ -400,25 +400,42 @@ export default function App() {
 		3. When you've completed the challenge, you should be able to move Pookachu in any 
 		   direction using the direction pad on the screen or the arrow keys on your keyboard, while staying within the boundaries of the prison. You should also be able to escape the prison if you blow up the door using the A and B buttons! 
 */
+  //  SOLUTION 1
+	// function updatePosition() {
+	// 		switch (pookachu.direction) {
+  //       case 'right':
+  //       setPookachu(prev => ({...prev, xPosition: prev.xPosition+1 < boundaries.xAxis.max ? prev.xPosition+1 : boundaries.xAxis.max}))  
+  //         break;
 
-	function updatePosition() {
-			switch (pookachu.direction) {
-        case 'right':
-        setPookachu(prev => ({...prev, xPosition: prev.xPosition+1 < boundaries.xAxis.max ? prev.xPosition+1 : boundaries.xAxis.max}))  
-          break;
+  //       case 'left':
+  //       setPookachu(prev => ({...prev, xPosition: prev.xPosition-1 > boundaries.xAxis.min ? prev.xPosition-1 : boundaries.xAxis.min}))  
+  //         break;
 
-        case 'left':
-        setPookachu(prev => ({...prev, xPosition: prev.xPosition-1 > boundaries.xAxis.min ? prev.xPosition-1 : boundaries.xAxis.min}))  
-          break;
+  //       case 'down':
+  //       setPookachu(prev => ({...prev, yPosition: prev.yPosition+1 < boundaries.yAxis.max ? prev.yPosition+1 : boundaries.yAxis.max}))  
+  //         break;
 
-        case 'down':
-        setPookachu(prev => ({...prev, yPosition: prev.yPosition+1 < boundaries.yAxis.max ? prev.yPosition+1 : boundaries.yAxis.max}))  
-          break;
+  //       case 'up':
+  //       setPookachu(prev => ({...prev, yPosition: prev.yPosition-1 > boundaries.yAxis.min ? prev.yPosition-1 : boundaries.yAxis.min}))  
+  //         break;     
+  //     }			
+	// }
 
-        case 'up':
-        setPookachu(prev => ({...prev, yPosition: prev.yPosition-1 > boundaries.yAxis.min ? prev.yPosition-1 : boundaries.yAxis.min}))  
-          break;     
-      }			
+  //  SOLUTION 2
+
+  function updatePosition() {
+		const direction = pookachu.direction;
+		const operation = direction === "right" || direction === "down" ? (value) => value + 1 : (value) => value -1 ;
+		let positionToUpdate = direction === "right" || direction === "left" ? "xPosition" : "yPosition";
+		let limitToCheck;
+		
+		if (direction === "right" || direction === "left") {
+			limitToCheck = direction === "right" ? boundaries.xAxis.max : boundaries.xAxis.min 
+		} else {
+			limitToCheck = direction === "down" ? boundaries.yAxis.max : boundaries.yAxis.min 
+		} 
+		
+		setPookachu(prev => prev[positionToUpdate] === limitToCheck ? prev : {...prev, [positionToUpdate]: operation(prev[positionToUpdate])})
 	}
 
 	return (
